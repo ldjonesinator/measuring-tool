@@ -1,30 +1,40 @@
+#include "pitches.h"
+
 // defines pins numbers
-const int trigPin = 2;
-const int echoPin = 3;
+const int TRIG_PIN = 2;
+const int ECHO_PIN = 3;
+const int NOTE_PIN = 8;
 
 // defines ultrasonic sensor variables
 const int SAMPLE_SIZE = 10;
 const int DELTA_T = 5; // 5 ms
 const unsigned int TIMEOUT = 23500; // in microseconds which would give approx 4 m (the sensor's max range)
-long duration;
+
 int distance;
+
+
+const unsigned int NOTE_DURATION = 16; // milliseconds
+const int MAX_BEEP_TIME = 2000; // 2 s
+int wait_time;
+
 
 void setup() {
   Serial.begin(9600);
-  pinMode(trigPin, OUTPUT);
-  pinMode(echoPin, INPUT);
+  pinMode(TRIG_PIN, OUTPUT);
+  pinMode(ECHO_PIN, INPUT);
   
 }
 
 int getDistance() {
-  digitalWrite(trigPin, LOW);
+  unsigned long duration;
+  digitalWrite(TRIG_PIN, LOW);
   delayMicroseconds(2);
-  // Sets the trigPin on HIGH state for 10 micro seconds
-  digitalWrite(trigPin, HIGH);
+  // Sets the TRIG_PIN on HIGH state for 10 micro seconds
+  digitalWrite(TRIG_PIN, HIGH);
   delayMicroseconds(10);
-  digitalWrite(trigPin, LOW);
-  // Reads the echoPin, returns the sound wave travel time in microseconds
-  duration = pulseIn(echoPin, HIGH, TIMEOUT);
+  digitalWrite(TRIG_PIN, LOW);
+  // Reads the ECHO_PIN, returns the sound wave travel time in microseconds
+  duration = pulseIn(ECHO_PIN, HIGH, TIMEOUT);
   // Calculating the distance
   return duration * 340*100/1000000 / 2;
 }
@@ -45,14 +55,22 @@ int getSensorSamples(int samples, int time_gap) {
 }
 
 void loop() {
-  // Clears the trigPin
+  // Clears the TRIG_PIN
   distance = getSensorSamples(SAMPLE_SIZE, DELTA_T);
   // Prints the distance on the Serial Monitor
-  if (distance <= 2) {
+  if (distance <= 2) { 
     Serial.println("Too far or Too close");
   } else {
     Serial.print("Distance: ");
     Serial.println(distance);
+
+    tone(NOTE_PIN, NOTE_C4, NOTE_DURATION);
+    wait_time = 20 * distance;
+    Serial.println(wait_time);
+    delay(wait_time);
+
+    noTone(NOTE_PIN);
   }
+
   
 }
