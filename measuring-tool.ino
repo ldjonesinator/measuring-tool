@@ -16,6 +16,7 @@ int distance;
 const unsigned int NOTE_DURATION = 16; // milliseconds
 const int MAX_BEEP_TIME = 2000; // 2 s
 int wait_time;
+unsigned int start_time;
 
 
 void setup() {
@@ -55,10 +56,11 @@ int getSensorSamples(int samples, int time_gap) {
 }
 
 void loop() {
+  start_time = millis();
   // Clears the TRIG_PIN
   distance = getSensorSamples(SAMPLE_SIZE, DELTA_T);
   // Prints the distance on the Serial Monitor
-  if (distance <= 2) { 
+  if (distance <= 2) {
     Serial.println("Too far or Too close");
   } else {
     Serial.print("Distance: ");
@@ -66,7 +68,8 @@ void loop() {
 
     tone(NOTE_PIN, NOTE_C4, NOTE_DURATION);
     wait_time = 20 * distance;
-    Serial.println(wait_time);
+    Serial.print("Time: ");
+    Serial.println(wait_time + (millis() - start_time));
     delay(wait_time);
 
     noTone(NOTE_PIN);
