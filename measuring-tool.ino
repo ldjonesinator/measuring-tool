@@ -70,7 +70,6 @@ void loop() {
     wait_time = 20 * distance;
     Serial.print("Time: ");
     Serial.println(wait_time + (millis() - start_time));
-    Serial.println((millis() - start_time));
     delay(wait_time);
 
     noTone(NOTE_PIN);
