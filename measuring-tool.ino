@@ -16,7 +16,7 @@ int distance;
 const unsigned int NOTE_DURATION = 16; // milliseconds
 const int MAX_BEEP_TIME = 2000; // 2 s
 int wait_time;
-unsigned int start_time;
+unsigned long start_time;
 
 
 void setup() {
@@ -70,6 +70,7 @@ void loop() {
     wait_time = 20 * distance;
     Serial.print("Time: ");
     Serial.println(wait_time + (millis() - start_time));
+    Serial.println((millis() - start_time));
     delay(wait_time);
 
     noTone(NOTE_PIN);
