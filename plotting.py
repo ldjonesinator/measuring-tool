@@ -16,26 +16,26 @@ def get_data(filename):
 
     return distances, times
 
-def plot_characterisic(distances, times):
+def plot_characterisic(distances, freq):
     plt.figure(figsize=(10,6))
     axes = plt.axes()
-    axes.plot(distances, times)
+    axes.plot(distances, freq)
 
-    axes.set_title("Change in beep period due to distance")
+    axes.set_title("Change in beep frequency due to distance")
     axes.set_xlabel("Distance (cm)")
-    axes.set_ylabel("Time (ms)")
+    axes.set_ylabel("Frequency (Hz)")
 
     xticks = range(0, 140, 10)
     axes.set_xlim(left=0)
     axes.set_xticks(xticks)
     axes.set_xticklabels(xticks)
 
-    yticks = range(0, 3000, 250)
-    axes.set_yticks(yticks)
-    axes.set_yticklabels(yticks)
+    # yticks = range(0, 3000, 250)
+    # axes.set_yticks(yticks)
+    # axes.set_yticklabels(yticks)
 
     axes.grid(True)
     plt.show()
 
 distances, times = get_data("measurements.txt")
-plot_characterisic(distances, times)
+plot_characterisic(distances, 1000/np.array(times))
